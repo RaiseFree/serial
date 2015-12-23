@@ -2,10 +2,8 @@
 <database name="serial_db" defaultIdMethod="native" defaultPhpNamingMethod="underscore">
     <table name="user" phpName="User">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
-        <column name="name" type="varchar" size="255" required="true" description="员工姓名"/>
-        <column name="password" type="varchar" size="255" required="true" description="员工姓名"/>
-        <column name="number" type="varchar" size="24" required="true" description="员工编号"/>
-        <column name="role" type="integer" size="2" required="true" description="角色(1:开发  2:测试  3:运维  4:管理员)"/>
+        <column name="name" type="varchar" size="255" required="true" description="姓名"/>
+        <column name="password" type="varchar" size="255" required="true" description="面膜"/>
         <column name="email" type="varchar" size="255" required="true" description="员工邮箱"/>
         <column name="login_at" type="timestamp" required="true" description="最后登录时间"/>
         <column name="status" type="integer" default="0" required="true" description="组状态: 1 启用 0 停用"/>
@@ -17,13 +15,23 @@
     <table name="serial" phpName="Serial">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
         <column name="name" type="varchar" size="24" required="true" description="美剧名"/>
-        <column name="project_name" type="varchar" size="200" required="true" description="上线项目名称"/>
-        <column name="project_content" type="LONGVARCHAR" required="false" description="上线项目内容"/>
-        <column name="project_redmine" type="varchar" size="200" required="true" description="上线项目Redmine地址"/>
-        <column name="dev_status" type="integer" size="2" defaultValue="0" required="true" description="开发人员发布流程状态(0:未发布，1:已发布到生产, 2:自验证完成, 200:测试验证完毕通知)"/>
-        <column name="ope_status" type="integer" size="2" defaultValue="0" required="true" description="运维人员发布流程状态(0:未发布，1:demo已发布, 2:生产已发布, 200:测试验证完毕通知)"/>
-        <column name="test_status" type="integer" size="2" defaultValue="0" required="true" description="测试人员发布验证状态(0:未验证, 1:demo验证通过，2:demo验证未通过, 3:demo不需要验证, 200:生产验证通过, 5:生产开发自验证, 6:生产无法验证)"/>
-        <column name="publish_at" type="timestamp" required="true" description="发布时间"/>
+        <behavior name="timestampable" />
+    </table>
+    <table name="source" phpName="Source">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+        <column name="serial_id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+        <column name="name" type="varchar" size="24" required="true" description=""/>
+        <column name="url" type="timestamp" required="true" description="来源地址"/>
+        <behavior name="timestampable" />
+    </table>
+    <table name="episode" phpName="Episode">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+        <column name="serial_id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+        <column name="source_id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+        <column name="season" type="varchar" size="24" required="true" description=""/>
+        <column name="name" type="varchar" size="200" required="true" description=""/>
+        <column name="url" type="timestamp" required="true" description="下载链接"/>
+        <column name="recode_at" type="timestamp" required="true" description="最后收录时间"/>
         <behavior name="timestampable" />
     </table>
 </database>

@@ -7,31 +7,47 @@
         <column name="email" type="varchar" size="255" required="true" description="员工邮箱"/>
         <column name="login_at" type="timestamp" required="true" description="最后登录时间"/>
         <column name="status" type="integer" default="0" required="true" description="组状态: 1 启用 0 停用"/>
-        <unique name="_number_index">
-            <unique-column name="number"/>
-        </unique>
         <behavior name="timestampable" />
     </table>
     <table name="serial" phpName="Serial">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
-        <column name="name" type="varchar" size="24" required="true" description="美剧名"/>
+        <column name="name" type="varchar" size="200" required="true" description="美剧名"/>
         <behavior name="timestampable" />
     </table>
     <table name="source" phpName="Source">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
-        <column name="serial_id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
-        <column name="name" type="varchar" size="24" required="true" description=""/>
-        <column name="url" type="timestamp" required="true" description="来源地址"/>
+        <column name="serial_id" type="integer" required="true" primaryKey="true"/>
+        <column name="name" type="varchar" size="200" required="true" description=""/>
+        <column name="url" type="varchar" size="400" required="true" description="来源地址"/>
         <behavior name="timestampable" />
     </table>
     <table name="episode" phpName="Episode">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
-        <column name="serial_id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
-        <column name="source_id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+        <column name="serial_id" type="integer" required="true"/>
+        <column name="source_id" type="integer" required="true"/>
         <column name="season" type="varchar" size="24" required="true" description=""/>
+        <column name="number" type="integer" required="true"/>
         <column name="name" type="varchar" size="200" required="true" description=""/>
-        <column name="url" type="timestamp" required="true" description="下载链接"/>
+        <behavior name="timestampable" />
+    </table>
+    <table name="download" phpName="Download">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+        <column name="serial_id" type="integer" required="true"/>
+        <column name="source_id" type="integer" required="true"/>
+        <column name="season" type="varchar" size="24" required="true" description=""/>
+        <column name="episode_id" type="integer" required="true"/>
+        <column name="name" type="varchar" size="200" required="true" description=""/>
+        <column name="size" type="varchar" size="200" required="true" description=""/>
+        <column name="number" type="integer" required="true"/>
+        <column name="eformat" type="varchar" size="20" required="true" description="HDTV|MKV"/>
+        <column name="type" type="varchar" size="20" required="true" description="ed2k|magnet|thunder"/>
+        <column name="url" type="longvarchar" size="2000" required="true" description="来源地址"/>
+        <column name="url_md5" type="varchar" size="32" required="true" description="来源地址索引"/>
+        <column name="is_download" type="integer" default="0" required="true" description="是否下载过"/>
         <column name="recode_at" type="timestamp" required="true" description="最后收录时间"/>
         <behavior name="timestampable" />
+        <unique name="_download_index">
+            <unique-column name="url_md5"/>
+        </unique>
     </table>
 </database>

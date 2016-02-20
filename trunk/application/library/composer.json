@@ -5,5 +5,8 @@
         "twig/twig": "1.*",
         "phpfastcache/phpfastcache": "3.0.*",
         "fabpot/goutte":"3.1.*"
+    },
+    "autoload": {
+        "classmap": ["../models"]
     }
 }

@@ -1,0 +1,63 @@
+{%extends "layout.phtml"%}
+{%block main%}
+        <div class="row">
+            <ol class="breadcrumb">
+                <li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
+                <li class="active">Tables</li>
+            </ol>
+        </div><!--/.row-->
+
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">美剧</h1>
+            </div>
+        </div><!--/.row-->
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading"></div>
+                    <div class="panel-body">
+                        <table id="main_table"
+                               data-search="true"
+                               data-detail-view="true"
+                               data-detail-formatter="detailFormatter"
+                               data-id-field="Id">
+                            <thead>
+                            <tr>
+                                <th data-field="Id">ID</th>
+                                <th data-field="Name" data-url="true">剧集</th>
+                                <th data-field="CreatedAt" data-sortable="true">记录日期</th>
+                                <th data-field="UpdatedAt" data-sortable="true">更新日期</th>
+                                <th data-field="action" >操作</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div><!--/.row-->	
+
+<script>
+var data = {{ data|json_encode|raw }}
+$('#main_table').bootstrapTable({
+    data: data
+});
+function detailFormatter(index, row){
+    var html =[];
+    $.ajax({
+        url: '/download/info',
+        data: { serial_id:row.Id },
+        dataType: 'json',
+        async:false,
+        success: function(data){
+            for (var i = 0;i < data.length; i++) {
+                html.push('<a href="/list/' + row.Id + '/' + data[i] + '" target="_blank">第' + data[i] + '季</a>');
+            }
+        }
+    });
+    return html.join('|');
+}
+
+</script>
+{%endblock%}

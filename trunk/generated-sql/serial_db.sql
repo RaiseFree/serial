@@ -31,7 +31,7 @@ DROP TABLE IF EXISTS `serial`;
 CREATE TABLE `serial`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(24) NOT NULL COMMENT '美剧名',
+    `name` VARCHAR(200) NOT NULL COMMENT '美剧名',
     `created_at` DATETIME,
     `updated_at` DATETIME,
     PRIMARY KEY (`id`)
@@ -66,18 +66,39 @@ CREATE TABLE `episode`
     `serial_id` INTEGER NOT NULL,
     `source_id` INTEGER NOT NULL,
     `season` VARCHAR(24) NOT NULL,
+    `number` INTEGER NOT NULL,
     `name` VARCHAR(200) NOT NULL,
+    `created_at` DATETIME,
+    `updated_at` DATETIME,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- download
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `download`;
+
+CREATE TABLE `download`
+(
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `serial_id` INTEGER NOT NULL,
+    `source_id` INTEGER NOT NULL,
+    `season` VARCHAR(24) NOT NULL,
+    `episode_id` INTEGER NOT NULL,
+    `name` VARCHAR(200) NOT NULL,
+    `size` VARCHAR(200) NOT NULL,
     `number` INTEGER NOT NULL,
     `eformat` VARCHAR(20) NOT NULL COMMENT 'HDTV|MKV',
     `type` VARCHAR(20) NOT NULL COMMENT 'ed2k|magnet|thunder',
-    `url` VARCHAR(400) NOT NULL COMMENT '来源地址',
+    `url` TEXT(2000) NOT NULL COMMENT '来源地址',
     `url_md5` VARCHAR(32) NOT NULL COMMENT '来源地址索引',
     `is_download` INTEGER DEFAULT 0 NOT NULL COMMENT '是否下载过',
     `recode_at` DATETIME NOT NULL COMMENT '最后收录时间',
     `created_at` DATETIME,
     `updated_at` DATETIME,
     PRIMARY KEY (`id`),
-    UNIQUE INDEX `_episode_index` (`url_md5`)
+    UNIQUE INDEX `_download_index` (`url_md5`)
 ) ENGINE=InnoDB;
 
 # This restores the fkey checks, after having unset them earlier

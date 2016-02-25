@@ -68,7 +68,7 @@
 
 <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
+        <div class="modal-content xiaomi-remote">
         </div>
     </div>
 </div>
@@ -86,7 +86,7 @@ window.operateEvents = {
     'click .remote': function(e, value, row, index){
         var href = "http://d.miwifi.com/d2r/?url=" + Base64.encodeURI(row.url) + "&src=demo"
         var frame = $('<iframe src="'+href+'" width="928" height="630"> </iframe> ');
-        $('.modal-content').html(frame);
+        $('.xiaomi-remote').html(frame);
     },
     'click .like': function (e, value, row, index) {
         alert('You click like action, row: ' + JSON.stringify(row));

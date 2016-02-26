@@ -85,6 +85,7 @@ class IndexController extends \Yaf\Controller_Abstract
 
     public function createAction() 
     {
+        die();
         $posts   = $this->_request->getPost();
         $url     = $posts['url'];
         $name     = '';

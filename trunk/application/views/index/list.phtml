@@ -98,13 +98,15 @@ window.operateEvents = {
         });
     }
 };
-var data = {{ downloads|json_encode|raw }}
+var data = {{ downloads|json_encode|raw }};
+
 for (var key in data) {
     var tableName = '#main_table_'+key;
     $(tableName).bootstrapTable({
         data: data[key]
     });
 }
+
 {% for key,value in downloads %}
     $('#button_{{ key }}').bind('click', function(){
         //alert('getSelections: ' + JSON.stringify($('#main_table_{{ key }}').bootstrapTable('getSelections')));

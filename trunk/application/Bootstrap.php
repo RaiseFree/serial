@@ -10,11 +10,9 @@ class Bootstrap extends \Yaf\Bootstrap_Abstract {
     }
 
     /**
-     * @desc  
-     * @param  
-     * @return  
+     * @param \Yaf\Dispatcher $dispatcher
      */
-    public function _initRouter(\Yaf\Dispatcher $dispatcher) 
+    public function _initRouter(\Yaf\Dispatcher $dispatcher)
     {
         \Yaf\Dispatcher::getInstance()->getRouter()->addRoute(
             "episodelista",
@@ -35,20 +33,20 @@ class Bootstrap extends \Yaf\Bootstrap_Abstract {
         );
 
         \Yaf\Dispatcher::getInstance()->getRouter()->addRoute(
-            "downloadlist",
+            "downloadlista",
             new \Yaf\Route\Regex(
-                "#^/download/(\d+)#",
+                "#^/download/list/(\d+)/(\d+)#",
                 array('controller' => "download", 'action' => 'list'),
-                array(1 => "id")
+                array(1 => "id", 2 => "season")
             )
         );
 
         \Yaf\Dispatcher::getInstance()->getRouter()->addRoute(
             "downloadlist",
             new \Yaf\Route\Regex(
-                "#^/download/(\d+)/(\d+)/(\S+)/(\S+)#",
+                "#^/download/list/(\d+)/(\d+)/(\S+)#",
                 array('controller' => "download", 'action' => 'list'),
-                array(1 => "id", 2 => "season" ,3 => 'format', 4 => 'type')
+                array(1 => "id", 2 => "season", 3 => 'order')
             )
         );
     }

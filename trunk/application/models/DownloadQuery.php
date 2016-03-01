@@ -14,5 +14,17 @@ use Base\DownloadQuery as BaseDownloadQuery;
  */
 class DownloadQuery extends BaseDownloadQuery
 {
-
+    private static $__ALL_EFORMART = 'all_eformats';
+    public function getEformats()
+    {
+        $data = Util::Men()->get(self::$__ALL_EFORMART);
+        if(empty($data)){
+            $data = $this->select('eformat')->groupByEformat()->find();
+            if($data){
+                $data = $data->toArray();
+                Util::Men()->set(self::$__ALL_EFORMART, $data);
+            }
+        }
+        return $data;
+    }
 }

@@ -24,18 +24,18 @@
                         <a href="/list/{{id}}/{{season}}/ed2k">ed2k 优先</a>
                         <a href="/list/{{id}}/{{season}}/magnet">magnet 优先</a>
                     </div>
-                    {% for key,value in downloads %}
-                    <div class="panel-body">
-                        <button id="button_{{ key }}" class="btn btn-default" data-toggle="modal" data-target="#myModal">下载 {{ key }}</button>
+                    {% for value in eformats %}
+                    <div class="panel-body" style="display: none;" id="body_{{ value }}">
+                        <button id="button_{{ value }}" class="btn btn-default" data-toggle="modal" data-target="#myModal">下载 {{ value }}</button>
                         <p></p>
-                        <table id="main_table_{{ key }}" 
+                        <table id="main_table_{{ value }}"
                             data-id-field="Id"
                             data-detail-view="true"
                             data-detail-formatter="detailFormatter">
                             <thead>
                             <tr>
                                 <th data-checkbox="true"></th>
-                                <th data-field="name" data-sortable="true">{{ key }}</th>
+                                <th data-field="name" data-sortable="true">{{ value }}</th>
                                 <th data-field="size" data-sortable="true">SIZE</th>
                                 <th data-field="recode_at" data-sortable="true">RecodeAt</th>
                                 <th data-field="operate" data-events="operateEvents" data-formatter="operateFormatter">操作</th>
@@ -98,27 +98,38 @@ window.operateEvents = {
         });
     }
 };
-var data = {{ downloads|json_encode|raw }};
+//var data = {{ downloads|json_encode|raw }}
+var data = null;
+$.ajax({
+    url: "/download/list/{{id}}/{{season}}/{{order}}",    //请求的url地址
+    dataType: "json",   //返回格式为json
+    async: false, //请求是否异步，默认为异步，这也是ajax重要特性
+    type: "GET",   //请求方式
+    success: function(response) {
+        data = response;
+    }
+});
 
 for (var key in data) {
     var tableName = '#main_table_'+key;
+    var bodyName  = '#body_'+key;
     $(tableName).bootstrapTable({
         data: data[key]
     });
-}
+    $(bodyName).show();
 
-{% for key,value in downloads %}
-    $('#button_{{ key }}').bind('click', function(){
-        //alert('getSelections: ' + JSON.stringify($('#main_table_{{ key }}').bootstrapTable('getSelections')));
-        var data = $('#main_table_{{ key }}').bootstrapTable('getSelections');
+    $('#button_'+key).bind('click', function(e){
+        var btId = $(this).attr('id');
+        btId = btId.replace('button_', '');
+        var data = $('#main_table_'+btId).bootstrapTable('getSelections');
         var urls = [];
         for (var i = 0; i < data.length; i++) {
             urls.push(data[i].url);
         }
-        //urls.join('\r');
         $('.modal-body').html(urls.join('\r'));
     });
-{% endfor %}
+}
+
 function detailFormatter(index, row){
     return row.url;
 }

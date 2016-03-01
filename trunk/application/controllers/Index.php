@@ -14,9 +14,9 @@ class IndexController extends \Yaf\Controller_Abstract
     }
 
     /**
-     * @desc  
-     * @param  
-     * @return  
+     * @param int $id
+     * @param int $season
+     * @param string $order
      */
     public function listAction($id = 0, $season = 0, $order = 'ed2k')
     {
@@ -37,44 +37,20 @@ class IndexController extends \Yaf\Controller_Abstract
         }
         $data1 = $query->find();
         $data1 = $data1->toarray();
-        $downloads = array();
         foreach ($data1 as $value) {
             $eformat = $value['Eformat'];
             $id      = $value['Id'];
-            !isset($downloads[$eformat]) && $downloads[$eformat] = array();
-            $downloads[$eformat][] = $value;
             $serialId = $value['SerialId'];
         }
 
+        $eformats = DownloadQuery::create()->getEformats();
         $souce = SerialQuery::create()->findOneById($serialId);
-        $con = Propel::getConnection();
-        if($order == 'ed2k')
-            $order = 'asc';
-        else
-            $order = 'desc';
-        $sql = "select * from (select * from serial_db.download where source_id = :sourceId and season = :season order by type {$order}) as a group by a.episode_id,a.eformat;";
-        $params = array(
-            ":sourceId" => $id,
-            ":season"   => $season
-        );
-        $stmt = $con->prepare($sql);
-        $stmt->bindParam(':sourceId', $sourceId, PDO::PARAM_INT);
-        $stmt->bindParam(':season', $season, PDO::PARAM_STR);
-        $stmt->execute();
-        $res = $stmt->fetchAll(PDO::FETCH_ASSOC, 'Download');
-        $downloads = array();
-        foreach ($res as $value) {
-            $eformat = $value['eformat'];
-            $id      = $value['id'];
-            !isset($downloads[$eformat]) && $downloads[$eformat] = array();
-            $downloads[$eformat][] = $value;
-            $serialId = $value['serial_id'];
-        }
 
         $this->_view->assign('id', $sourceId);
         $this->_view->assign('data', $data);
         $this->_view->assign('season', $season);
-        $this->_view->assign('downloads', $downloads);
+        $this->_view->assign('order', $order);
+        $this->_view->assign('eformats', $eformats);
         $this->_view->title($souce->getName());
     }
 
